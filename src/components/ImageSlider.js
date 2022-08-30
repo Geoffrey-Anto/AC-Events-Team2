@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
-import { motion } from "framer-motion";
 
 const ImageSlider = ({ slides }) => {
   const [current, setCurrent] = useState({
@@ -9,15 +8,34 @@ const ImageSlider = ({ slides }) => {
     next: 1,
   });
 
+  const [isSliding, setIsSliding] = useState(false);
+
+  const sliderRef = useRef();
+
   useEffect(() => {
     window.addEventListener("keyup", keyPressHandler, false);
-    // window.addEventListener("scroll", scrollHandler, false);
+    window.addEventListener("wheel", scrollHandler, false);
     return () => {
       window.removeEventListener("keyup", keyPressHandler);
-      // window.removeEventListener("scroll", scrollHandler);
+      window.removeEventListener("wheel", scrollHandler);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
+
+  function scrollHandler(e) {
+    if ((e.deltaX > 10 || e.deltaX < 10) && !isSliding) {
+      setIsSliding(true);
+      setTimeout(() => {
+        if (e.deltaX > 0) {
+          next();
+        } else {
+          prev();
+        }
+        setIsSliding(false);
+      }, 200);
+    }
+    // e.deltaX > 100 ? next() : prev();
+  }
 
   if (!Array.isArray(slides) || slides.length <= 1) {
     return null;
@@ -73,7 +91,7 @@ const ImageSlider = ({ slides }) => {
     <section className="slider">
       <FaArrowAltCircleLeft className="left-arrow" onClick={prev} />
       <FaArrowAltCircleRight className="right-arrow" onClick={next} />
-      <div className="slider__images__container">
+      <div className="slider__images__container" ref={sliderRef}>
         <img
           src={slides[current.prev].image}
           alt="alt"
