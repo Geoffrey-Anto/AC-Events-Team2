@@ -92,17 +92,35 @@ const ImageSlider = ({ slides }) => {
       <FaArrowAltCircleLeft className="left-arrow" onClick={prev} />
       <FaArrowAltCircleRight className="right-arrow" onClick={next} />
       <div className="slider__images__container" ref={sliderRef}>
-        <img
-          src={slides[current.prev].image}
-          alt="alt"
-          className="image left"
-        />
-        <img src={slides[current.curr].image} alt="alt" className="image" />
-        <img
-          src={slides[current.next].image}
-          alt="alt"
-          className="image right"
-        />
+        <div>
+          <img
+            src={slides[current.prev].image}
+            alt="alt"
+            className="image left"
+          />
+          <div className="slide__text__container hidden">
+            <p className="slide__header">{slides[current.prev].title}</p>
+            <p className="slide__text">{slides[current.prev].text}</p>
+          </div>
+        </div>
+        <div>
+          <img src={slides[current.curr].image} alt="alt" className="image" />
+          <div className="slide__text__container">
+            <p className="slide__header">{slides[current.curr].title}</p>
+            <p className="slide__text">{slides[current.curr].text}</p>
+          </div>
+        </div>
+        <div>
+          <img
+            src={slides[current.next].image}
+            alt="alt"
+            className="image right"
+          />
+          <div className="slide__text__container hidden">
+            <p className="slide__header">{slides[current.next].title}</p>
+            <p className="slide__text">{slides[current.next].text}</p>
+          </div>
+        </div>
       </div>
     </section>
   );
