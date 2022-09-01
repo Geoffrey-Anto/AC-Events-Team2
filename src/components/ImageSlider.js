@@ -23,6 +23,9 @@ const ImageSlider = ({ slides }) => {
   }, [current]);
 
   function scrollHandler(e) {
+    if (window && window.screen.width <= 768) {
+      return;
+    }
     if ((e.deltaX > 10 || e.deltaX < 10) && !isSliding) {
       setIsSliding(true);
       setTimeout(() => {
@@ -92,35 +95,64 @@ const ImageSlider = ({ slides }) => {
       <FaArrowAltCircleLeft className="left-arrow" onClick={prev} />
       <FaArrowAltCircleRight className="right-arrow" onClick={next} />
       <div className="slider__images__container" ref={sliderRef}>
-        <div>
-          <img
-            src={slides[current.prev].image}
-            alt="alt"
-            className="image left"
-          />
-          <div className="slide__text__container hidden">
-            <p className="slide__header">{slides[current.prev].title}</p>
-            <p className="slide__text">{slides[current.prev].text}</p>
-          </div>
-        </div>
-        <div>
-          <img src={slides[current.curr].image} alt="alt" className="image" />
-          <div className="slide__text__container">
-            <p className="slide__header">{slides[current.curr].title}</p>
-            <p className="slide__text">{slides[current.curr].text}</p>
-          </div>
-        </div>
-        <div>
-          <img
-            src={slides[current.next].image}
-            alt="alt"
-            className="image right"
-          />
-          <div className="slide__text__container hidden">
-            <p className="slide__header">{slides[current.next].title}</p>
-            <p className="slide__text">{slides[current.next].text}</p>
-          </div>
-        </div>
+        {window && window.screen.width > 768 ? (
+          <>
+            <div>
+              <img
+                src={slides[current.prev].image}
+                alt="alt"
+                className="image left"
+              />
+              <div className="slide__text__container hidden">
+                <p className="slide__header">{slides[current.prev].title}</p>
+                <p className="slide__text">{slides[current.prev].text}</p>
+              </div>
+            </div>
+            <div>
+              <img
+                src={slides[current.curr].image}
+                alt="alt"
+                className="image"
+              />
+              <div className="slide__text__container">
+                <p className="slide__header">{slides[current.curr].title}</p>
+                <p className="slide__text">{slides[current.curr].text}</p>
+              </div>
+            </div>
+            <div>
+              <img
+                src={slides[current.next].image}
+                alt="alt"
+                className="image right"
+              />
+              <div className="slide__text__container hidden">
+                <p className="slide__header">{slides[current.next].title}</p>
+                <p className="slide__text">{slides[current.next].text}</p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {slides.map((slide, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{
+                    width: "350px",
+                    height: "auto",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <img src={slide.image} alt="alt" className="image" />
+                  <div className="slide__text__container">
+                    <p className="slide__header">{slide.title}</p>
+                    <p className="slide__text">{slide.text}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
     </section>
   );
